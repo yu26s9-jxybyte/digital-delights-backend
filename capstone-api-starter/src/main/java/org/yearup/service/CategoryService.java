@@ -43,7 +43,7 @@ public class CategoryService
 
     public List<Product> getProductsByCategoryId(int categoryId)
     {
-        if (categoryRepository.existsById(categoryId))
+        if (!categoryRepository.existsById(categoryId))
         {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
         }
