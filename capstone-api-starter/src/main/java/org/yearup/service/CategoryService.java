@@ -1,5 +1,6 @@
 package org.yearup.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yearup.models.Category;
 import org.yearup.repository.CategoryRepository;
@@ -10,7 +11,7 @@ import java.util.List;
 public class CategoryService
 {
     private final CategoryRepository categoryRepository;
-
+    @Autowired
     public CategoryService(CategoryRepository categoryRepository)
     {
         this.categoryRepository = categoryRepository;
@@ -19,13 +20,18 @@ public class CategoryService
     public List<Category> getAllCategories()
     {
         // get all categories
-        return null;
+        return categoryRepository.findAll();
     }
 
-    public Category getById(int categoryId)
+    public Category getCategoryById(int categoryId)
     {
         // get category by id
-        return null;
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+        if (category == null)
+        {
+            throw new RuntimeException("Category not found!" + categoryId);
+        }
+        return category;
     }
 
     public Category create(Category category)
