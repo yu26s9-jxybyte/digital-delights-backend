@@ -36,10 +36,11 @@ public class CategoriesController {
         return categoryService.getAllCategories();
     }
     // add the appropriate annotation for a get action
+    @GetMapping("/{id}")
     public Category getById(@PathVariable int id)
     {
         // get the category by id
-        return null;
+        return categoryService.getCategoryById(id);
     }
 
     // the url to return all products in category 1 would look like this
@@ -48,7 +49,7 @@ public class CategoriesController {
     public List<Product> getProductsById(@PathVariable int categoryId)
     {
         // get a list of product by categoryId
-        return null;
+        return productService.getProductsByCategoryId(categoryId);
     }
 
     // add annotation to call this method for a POST action
