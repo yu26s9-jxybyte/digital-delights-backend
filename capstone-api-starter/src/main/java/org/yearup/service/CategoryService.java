@@ -1,7 +1,9 @@
 package org.yearup.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import org.yearup.models.Category;
 import org.yearup.models.Product;
 import org.yearup.repository.CategoryRepository;
@@ -34,13 +36,17 @@ public class CategoryService
         Category category = categoryRepository.findById(categoryId).orElse(null);
         if (category == null)
         {
-            throw new RuntimeException("Category not found!" + categoryId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
         }
         return category;
     }
 
     public List<Product> getProductsByCategoryId(int categoryId)
     {
+        if (categoryRepository.existsById(categoryId))
+        {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
+        }
         return productRepository.findByCategoryId(categoryId);
     }
 
@@ -56,7 +62,7 @@ public class CategoryService
         Category existingCategory = categoryRepository.findById(categoryId).orElse(null);
         if (existingCategory == null)
         {
-            throw new RuntimeException("Category not found!" + categoryId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
         }
 
         category.setCategoryId(categoryId);
@@ -69,7 +75,7 @@ public class CategoryService
         Category existing = categoryRepository.findById(categoryId).orElse(null);
         if (existing == null)
         {
-            throw new RuntimeException("Category not found!" + categoryId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
         }
         categoryRepository.deleteById(categoryId);
     }
