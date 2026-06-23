@@ -53,7 +53,14 @@ public class CategoryService
     public Category update(int categoryId, Category category)
     {
         // update category and return the updated category
-        return null;
+        Category existingCategory = categoryRepository.findById(categoryId).orElse(null);
+        if (existingCategory == null)
+        {
+            throw new RuntimeException("Category not found!" + categoryId);
+        }
+        
+        category.setCategoryId(categoryId);
+        return categoryRepository.save(category);
     }
 
     public void delete(int categoryId)
