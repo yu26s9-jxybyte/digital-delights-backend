@@ -71,21 +71,18 @@ public class CategoriesController {
     @PreAuthorize("hasRole('ADMIN')")
     public Category  updateCategory(@PathVariable int id, @RequestBody Category category)
     {
+        // update the category by id and return the updated category (200 OK)
         return categoryService.update(id, category);
     }
 
-    public Category updateCategory(@PathVariable int id, @RequestBody Category category)
-    {
-        // update the category by id and return the updated category (200 OK)
-        return null;
-    }
-
-
     // add annotation to call this method for a DELETE action - the url path must include the categoryId
     // add annotation to ensure that only an ADMIN can call this function
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteCategory(@PathVariable int id)
     {
         // delete the category by id and return status 204 No Content
-        return null;
+        categoryService.delete(id);
+        return ResponseEntity.status(204).build();
     }
 }

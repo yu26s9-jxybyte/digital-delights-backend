@@ -58,7 +58,7 @@ public class CategoryService
         {
             throw new RuntimeException("Category not found!" + categoryId);
         }
-        
+
         category.setCategoryId(categoryId);
         return categoryRepository.save(category);
     }
@@ -66,5 +66,11 @@ public class CategoryService
     public void delete(int categoryId)
     {
         // delete category
+        Category existing = categoryRepository.findById(categoryId).orElse(null);
+        if (existing == null)
+        {
+            throw new RuntimeException("Category not found!" + categoryId);
+        }
+        categoryRepository.deleteById(categoryId);
     }
 }
