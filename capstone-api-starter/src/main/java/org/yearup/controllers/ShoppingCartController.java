@@ -72,7 +72,7 @@ public class ShoppingCartController
         int userId = user.getId();
 
         ShoppingCart updatedCart = shoppingCartService.updateProduct(userId, productId, item.getQuantity());
-        return ResponseEntity.ok(200).body(updatedCart);
+        return ResponseEntity.ok(updatedCart);
         }
 
     // add a DELETE method to clear all products from the current users cart
