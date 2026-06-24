@@ -1,11 +1,13 @@
 package org.yearup.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.yearup.models.CartItem;
 import org.yearup.models.Product;
 import org.yearup.models.ShoppingCart;
 import org.yearup.models.ShoppingCartItem;
 import org.yearup.repository.ShoppingCartRepository;
+
 
 import java.util.List;
 
@@ -71,6 +73,7 @@ public class ShoppingCartService
        return getByUserId(userId);
     }
 
+    @Transactional
     public ShoppingCart clearCart(int userId)
     {
         shoppingCartRepository.deleteByUserId(userId);
