@@ -52,4 +52,9 @@ public class ShoppingCartItem
 
         return subTotal - discountAmount;
     }
+    public ShoppingCartItem(Product product, int quantity)
+    {
+        this.product = product;
+        this.quantity = quantity;
+    }
 }

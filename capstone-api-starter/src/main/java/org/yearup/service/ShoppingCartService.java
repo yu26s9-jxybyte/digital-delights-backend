@@ -22,11 +22,11 @@ public class ShoppingCartService
         this.productService = productService;
     }
 
-    // getcart
-    public ShoppingCart getCart(int userId)
+    // get cart
+    public ShoppingCart getByUserId(int userId)
     {
         ShoppingCart cart = new ShoppingCart();
-
+        // load the user's cart rows, look up each product, and build the ShoppingCart
         List<CartItem> items = shoppingCartRepository.findByUserId(userId);
 
         for (CartItem item : items)
@@ -39,44 +39,41 @@ public class ShoppingCartService
     //add product (post)
     public ShoppingCart addProduct(int userId, int productId)
     {
-        CartItem existing = shoppingCartRepository.getCartItem(userId, productId);
+        CartItem existing = shoppingCartRepository.findByUserIdAndProductId(userId, productId);
 
         if (existing == null)
         {
-            ShoppingCartRepository.addItem(userId, productId, 1);
+            //creates new cart row
+            CartItem newItem = new CartItem();
+            newItem.setUserId(userId);
+            newItem.setProductId(productId);
+            newItem.setQuantity(1);
+            shoppingCartRepository.save(newItem);
         }
         else
         {
-            int newQuantity = existing.getQuantity() + 1;
-            shoppingCartRepository.updateItem(userId, productId, newQuantity);
+            //increment quantity
+            existing.setQuantity(existing.getQuantity() + 1);
+            shoppingCartRepository.save(existing);
         }
-        return getCart(userId);
-    }
-    public ShoppingCart getByUserId(int userId)
-    {
-        ShoppingCart cart = new ShoppingCart();
-        // load the user's cart rows, look up each product, and build the ShoppingCart
-        List<CartItem> items = shoppingCartRepository.findByUserId(userId);
-
-        for (CartItem item : items)
-        {
-            Product product = productService.getById(item.getProductId());
-            cart.add(new ShoppingCartItem(product, item.getQuantity()));
-        }
-
-        return cart;
+        return getByUserId(userId);
     }
 
     // add additional methods here
     public ShoppingCart updateProduct(int userId, int productId, int quantity)
     {
-       shoppingCartRepository.updateItem(userId, productId, quantity);
-       return getCart(userId);
+       CartItem existing = shoppingCartRepository.findByUserIdAndProductId(userId, productId);
+       if (existing != null)
+       {
+           existing.setQuantity(quantity);
+           shoppingCartRepository.save(existing);
+       }
+       return getByUserId(userId);
     }
 
     public ShoppingCart clearCart(int userId)
     {
-        shoppingCartRepository.clearCart(userId);
-        return getCart(userId);
+        shoppingCartRepository.deleteByUserId(userId);
+        return getByUserId(userId);
     }
 }

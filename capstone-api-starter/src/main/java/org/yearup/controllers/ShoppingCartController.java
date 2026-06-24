@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yearup.models.ShoppingCart;
+import org.yearup.models.ShoppingCartItem;
 import org.yearup.models.User;
 import org.yearup.service.ShoppingCartService;
 import org.yearup.service.UserService;
@@ -16,7 +17,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/cart")
 @CrossOrigin
-@PreAuthorize("isAuthenticaed()") //only logged in users can access the cart
+@PreAuthorize("isAuthenticated()") //only logged in users can access the cart
 public class ShoppingCartController
 {
     // a shopping cart controller depends on the service layer
@@ -40,7 +41,7 @@ public class ShoppingCartController
         int userId = user.getId();
 
         // use the shoppingCartService to get all items in the cart and return the cart
-        return shoppingCartService.getCart(userId);
+        return shoppingCartService.getByUserId(userId);
     }
 
     // add a POST method to add a product to the cart - the url should be
@@ -64,7 +65,7 @@ public class ShoppingCartController
     @PutMapping("/products/{productId}")
     public ResponseEntity<ShoppingCart> updateProduct(
             @PathVariable int productId,
-            @RequestBody ShoppingCart item,
+            @RequestBody ShoppingCartItem item,
             Principal principal)
         {
         String userName = principal.getName();
