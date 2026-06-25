@@ -21,7 +21,7 @@ public class ProfileService
 
 public Profile getByUserId(int userId)
 {
-    return profileRepository.findById(userId).orElse(null);
+    return profileRepository.findById(userId).orElseThrow(()-> new RuntimeException("Profile not found."));
 }
 
 public Profile update(int userId, Profile profile)

@@ -25,18 +25,16 @@ public class ProfileController
         this.profileService = profileService;
         this.userService = userService;
         }
+
 @GetMapping
+@ResponseStatus(HttpStatus.OK)
     public Profile getProfile(Principal principal)
     {
         String username = principal.getName();
         User user = userService.getByUserName(username);
-        Profile profile = profileService.getByUserId(user.getId());
+        return profileService.getByUserId(user.getId());
 
-        if(profile == null)
-        {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile Not Found");
-        }
-        return profile;
+
     }
 
 @PutMapping
