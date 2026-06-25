@@ -1,6 +1,5 @@
 package org.yearup.service;
 
-
 import org.springframework.stereotype.Service;
 import org.yearup.models.CartItem;
 import org.yearup.models.Order;
@@ -51,7 +50,7 @@ public class OrderService {
 
         for (CartItem cartItem : cartItemList){
             OrderLineItem orderLineItem = new OrderLineItem();
-            //order line item id is generated
+
             orderLineItem.setOrderId(order.getOrderId());
             orderLineItem.setProduct(productService.getById(cartItem.getProductId()));;
             orderLineItem.setSalesPrice(BigDecimal.valueOf(productService.getById(cartItem.getProductId()).getPrice())

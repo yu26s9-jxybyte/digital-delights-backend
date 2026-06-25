@@ -1,6 +1,7 @@
 package org.yearup.controllers;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yearup.models.Order;
@@ -22,10 +23,24 @@ public class OrderController {
         this.userService = userService;
     }
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Order createOrder(Principal principal){
+    public ResponseEntity<?> createOrder(Principal principal) {
         String username = principal.getName();
-        return orderService.createOrder(userService.getIdByUsername(username));
+        int userId = userService.getIdByUsername(username);
+
+        // ask the service to attempt order creation
+        Order order = orderService.createOrder(userId);
+
+        // if the service returns null, the cart was empty
+        if (order == null) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Cannot checkout an empty cart.");
+        }
+        // otherwise return 201 Created with the order
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(order);
     }
+
 
 }
